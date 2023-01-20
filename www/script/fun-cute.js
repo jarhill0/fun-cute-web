@@ -119,10 +119,6 @@ function handleMouseEvent(e) {
     mousePosition.oldY = null;
     mousePosition.color = null;
 
-    if (randomInt(10) === 0) {
-      // applyRandomFilterToCanvas();
-    }
-
     if (randomInt(8) === 3) {
       dripCanvas();
     }
@@ -155,10 +151,7 @@ function handleTouchEvent(e) {
       activeTouches[t.identifier] = {
         // iPhone/iPad gives radiusX and radiusY for initial touch, always equal, with rotationAngle 0 and force 0
         // iPad with Apple Pencil instead gives radius and angle 0 but accurate force (from 0.0 to 1.0)
-        x: t.clientX,
-        y: t.clientY,
-        radius: t.radiusX || t.radiusY || radiusFromForce(t.force),
-        color: randomColor(),
+        x: t.clientX, y: t.clientY, radius: t.radiusX || t.radiusY || radiusFromForce(t.force), color: randomColor(),
       }
     });
   } else if (e.type === 'touchmove') {
@@ -202,15 +195,7 @@ function handleClick(e) {
 
 function drawAt(opts) {
   ctx.beginPath();
-  ctx.ellipse(
-    opts.x,
-    opts.y,
-    opts.radius,
-    opts.radius,
-    0,
-    0,
-    2 * Math.PI
-  );
+  ctx.ellipse(opts.x, opts.y, opts.radius, opts.radius, 0, 0, 2 * Math.PI);
   ctx.fillStyle = opts.color;
   ctx.fill();
 
@@ -236,25 +221,8 @@ function handleMotionEvent(e) {
         ignoreShake = false;
       }, 1000);
 
-      // applyRandomFilterToCanvas();
       dripCanvas();
     }
-  }
-}
-
-function applyRandomFilterToCanvas() {
-  const currentContents = exportCanvas();
-  const image = new Image();
-  image.src = currentContents;
-
-  image.onload = () => {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.filter = randomTransformation();
-    log(ctx.filter);
-    ctx.drawImage(image, 0, 0);
-    ctx.filter = 'none';
-    log(ctx.filter);
   }
 }
 
@@ -318,30 +286,6 @@ function randomColor() {
   const b = randomInt(256);
 
   return `rgb(${r}, ${g}, ${b})`
-}
-
-function randomHueRotation() {
-  return `hue-rotate(${randomInt(91) - 45}deg)`;
-}
-
-function randomBlur() {
-  return `blur(${(1 + randomInt(10)) / 5}px)`;
-}
-
-function randomSaturate() {
-  return `saturate(${60 + randomInt(100)}%)`;
-}
-
-function randomSepia() {
-  return `sepia(${30 + randomInt(20)}%)`;
-}
-
-const TRANSFORMATIONS = [randomHueRotation, randomBlur, randomSaturate, randomSepia];
-
-function randomTransformation() {
-  const choice = randomInt(TRANSFORMATIONS.length);
-  const transformation = TRANSFORMATIONS[choice];
-  return transformation();
 }
 
 function radiusFromForce(force) {
