@@ -1,0 +1,18 @@
+name: Push Site
+on:
+  push:
+    branches: [main]
+jobs:
+  Push-Site:
+    runs-on: ubuntu-latest
+    container: jarhill0/rclone
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: whoami
+      - run: rclone --version
+      - run: ./ci-upload.sh
+        env:
+          USER: ${{ secrets.USER }}
+          PASS: ${{ secrets.PASS }}
+          RCD: ${{ secrets.RCD }}
