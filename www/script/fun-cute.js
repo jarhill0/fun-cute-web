@@ -56,6 +56,8 @@ function registerMouseHandlers() {
   if (!gotMotionPermission) {
     canvas.onclick = handleClick;
   }
+
+  window.ondevicemotion = handleMotionEvent;
 }
 
 
