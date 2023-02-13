@@ -106,7 +106,7 @@ function handleMouseEvent(e) {
 
     mousePosition.x = e.clientX;
     mousePosition.y = e.clientY;
-    mousePosition.color = randomColor();
+    mousePosition.color = nextColor();
   } else if (e.type === 'mousemove') {
     if (!(e.buttons & 1)) return // require primary button pressed
 
@@ -153,7 +153,7 @@ function handleTouchEvent(e) {
       activeTouches[t.identifier] = {
         // iPhone/iPad gives radiusX and radiusY for initial touch, always equal, with rotationAngle 0 and force 0
         // iPad with Apple Pencil instead gives radius and angle 0 but accurate force (from 0.0 to 1.0)
-        x: t.clientX, y: t.clientY, radius: t.radiusX || t.radiusY || radiusFromForce(t.force), color: randomColor(),
+        x: t.clientX, y: t.clientY, radius: t.radiusX || t.radiusY || radiusFromForce(t.force), color: nextColor(),
       }
     });
   } else if (e.type === 'touchmove') {
@@ -288,6 +288,22 @@ function randomColor() {
   const b = randomInt(256);
 
   return `rgb(${r}, ${g}, ${b})`
+}
+
+function randomPink() {
+  // 285 to 326 are pink to my eye
+  const h = 285 + randomInt(326 - 285);
+  const s = 40 + randomInt(60);
+  const v = 20 + randomInt(70);
+
+  return `hsl(${h} ${s}% ${v}%)`
+}
+
+function nextColor() {
+  if ('#tatiana-mode' === window.location.hash) {
+    return randomPink();
+  }
+  return randomColor();
 }
 
 function radiusFromForce(force) {
